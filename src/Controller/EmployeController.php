@@ -12,6 +12,7 @@ use App\Form\RegisterType;
 use App\Entity\Employe;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class EmployeController extends AbstractController
 {
@@ -118,4 +119,23 @@ class EmployeController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/login', name: 'app_login')]
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $email = $authenticationUtils->getLastUsername();
+
+        return $this->render('auth/login.html.twig', [
+            'email' => $email,
+            'error' => $error,
+        ]);
+    }
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(): never
+    {
+        // controller can be blank: it will never be executed!
+    }
+    
 }
