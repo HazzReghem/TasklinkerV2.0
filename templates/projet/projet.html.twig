@@ -44,11 +44,11 @@
                             {% endif %}
                         </a>
                     {% endfor %}
-                    {% if is_granted('ROLE_ADMIN') %}
+                    {# {% if is_granted('ROLE_ADMIN') %} #}
                         <a href="{{ path('app_tache_add', {id: projet.id}) }}" class="task-add">
                             + Ajouter une tâche
                         </a>
-                    {% endif %}
+                    {# {% endif %} #}
                 </div>
             </div>
         {% endfor %}
