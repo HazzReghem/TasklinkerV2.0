@@ -10,7 +10,9 @@
                 <div class="avatar">{{ employe.prenom | first }}{{ employe.nom | first }}</div>
             {% endfor %}
         </div>
-        <a class="button" href="{{ path('app_projet_edit', {id: projet.id})}}">Modifier</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="button" href="{{ path('app_projet_edit', {id: projet.id})}}">Modifier</a>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -42,9 +44,11 @@
                             {% endif %}
                         </a>
                     {% endfor %}
-                    <a href="{{ path('app_tache_add', {id: projet.id}) }}" class="task-add">
-                        + Ajouter une tâche
-                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_tache_add', {id: projet.id}) }}" class="task-add">
+                            + Ajouter une tâche
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
