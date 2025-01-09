@@ -99,7 +99,6 @@ class EmployeController extends AbstractController
     {
         $employe = new Employe();
         $employe
-                ->setRoles(['ROLE_USER'])
                 ->setStatut('CDI')
                 ->setDateArrivee(new \DateTimeImmutable());
 
