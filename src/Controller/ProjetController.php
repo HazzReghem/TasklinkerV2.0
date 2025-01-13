@@ -24,18 +24,33 @@ class ProjetController extends AbstractController
 
     }
 
+    // #[Route('/', name: 'app_projets')]
+    // public function projets(): Response
+    // {   
+    //     // Si l'utilisateur est admin, on affiche tous les projets
+    //     if($this->getUser()->isAdmin()) {
+    //         $projets = $this->projetRepository->findBy([
+    //             'archive' => false,
+    //         ]);   
+    //     // Sinon, on affiche seulement les projets de l'utilisateur 
+    //     } else {
+    //         $projets = $this->getUser()->getProjets()->filter(function (Projet $projet) { return !$projet->isArchive(); });
+    //     }
+
+    //     return $this->render('projet/liste.html.twig', [
+    //         'projets' => $projets,
+    //     ]);
+    // }
+
     #[Route('/', name: 'app_projets')]
     public function projets(): Response
-    {   
-        // Si l'utilisateur est admin, on affiche tous les projets
-        if($this->getUser()->isAdmin()) {
-            $projets = $this->projetRepository->findBy([
-                'archive' => false,
-            ]);   
-        // Sinon, on affiche seulement les projets de l'utilisateur 
-        } else {
-            $projets = $this->getUser()->getProjets()->filter(function (Projet $projet) { return !$projet->isArchive(); });
-        }
+    {
+        $user = $this->getUser();
+        // On vérifie si l'utilisateur est admin
+        $isAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true); 
+
+        // On récupère les projets de l'utilisateur grace au Querybuilder
+        $projets = $this->projetRepository->findByUser($user->getId(), $isAdmin);
 
         return $this->render('projet/liste.html.twig', [
             'projets' => $projets,

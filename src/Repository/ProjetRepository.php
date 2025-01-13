@@ -24,6 +24,27 @@ class ProjetRepository extends ServiceEntityRepository
 //    /**
 //     * @return Projet[] Returns an array of Projet objects
 //     */
+
+    public function findByUser(int $userId, bool $isAdmin): array
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        // Si l'utilisateur n'est pas admin, on récupère les projets de l'utilisateur
+        if (!$isAdmin) {
+            $qb->innerJoin('p.employes', 'e')
+            ->andWhere('e.id = :userId')
+            ->setParameter('userId', $userId);
+        }
+        
+        $qb->andWhere('p.archive = :archive')
+        ->setParameter('archive', false)
+        ->orderBy('p.id', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+
 //    public function findByExampleField($value): array
 //    {
 //        return $this->createQueryBuilder('p')
